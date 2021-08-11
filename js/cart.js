@@ -9,8 +9,10 @@ let cart;
 function loadCart() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
   cart = new Cart(cartItems);
+  console.log(cart);
 }
 
+//loadCart();
 // Make magic happen --- re-pull the Cart, clear out the screen and re-draw it
 function renderCart() {
   loadCart();
@@ -20,17 +22,34 @@ function renderCart() {
 
 // TODO: Remove all of the rows (tr) in the cart table (tbody)
 function clearCart() {
-    document.getElementById("cart").remove();
+    document.getElementById('cart').remove();
 }
 
 // TODO: Fill in the <tr>'s under the <tbody> for each item in the cart
 function showCart() {
 
   // TODO: Find the table body
+  let tablebody=document.getElementById('cart').getElementsByTagName('tbody');
+  table.appendChild(tablebody);
 
   // TODO: Iterate over the items in the cart
-  // TODO: Create a TR
+  for (let i=0; i<cart.length;i++){
+        // TODO: Create a TR
+      let trElement=document.createElement('tr');
+      tablebody.appendChild(trElement);
   // TODO: Create a TD for the delete link, quantity,  and the item
+      let tdElement1=document.createElement('td');
+      tdElement1.textContent=cart[i].removeItem(cart.name);
+      trElement.appendChild(tdElement1);
+
+      let tdElement2=document.createElement('td');
+      tdElement2.textContent=cart[i].quantity;
+      trElement.appendChild(tdElement2);
+
+      let tdElement3=document.createElement('td');
+      tdElement2.textContent=Product.allProducts[i].name;
+      trElement.appendChild(tdElement2);
+  }
   // TODO: Add the TR to the TBODY and each of the TD's to the TR
 
 }
@@ -38,9 +57,22 @@ function showCart() {
 function removeItemFromCart(event) {
 
   // TODO: When a delete link is clicked, use cart.removeItem to remove the correct item
+  cart.removeItem(event.target.value);
   // TODO: Save the cart back to local storage
-  // TODO: Re-draw the cart table
+  if(localStorage.cart){ //if there is a data then do if statement 
+    let returnedData=JSON.parse(localStorage.cart);// this returned obj is a literal obj so we need a way to change it to constructor.
+    console.log(returnedData);
+    for (let i = 0; i < returnedData.length; i++)// cause the returned data is an literal obj holds data
+    {
+      new Chart (returnedData[i].name,returnedData[i].filePath, returnedData[i].product, returnedData[i].quantity);
 
+    }
+
+  // TODO: Re-draw the cart table
+  showCart();
+
+
+}
 }
 
 // This will initialize the page and draw the cart on screen
